@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, redirect
-import csv
 import os
+import csv
+
 
 app = Flask(__name__)
+
+cwd = os.path.dirname(os.path.abspath(__file__)) # absolute path for this file
+my_cvs_dbfile = os.path.join(cwd, 'db', 'database.csv')
+my_txt_dbfile = os.path.join(cwd, 'db', 'database.txt')
 
 @app.route('/')
 def my_home():
@@ -13,14 +18,14 @@ def html_page(page_name):
     return render_template(page_name)
 
 def write_to_file(data):
-    with open('./db/database.txt', mode='a') as database:
+    with open(my_txt_dbfile, mode='a') as database:
         email = data["email"]
         subject = data["subject"]
         message = data["message"]
-        file = database.write(f'\n{email},{subject},{message}')
+        database.write(f'\n{email},{subject},{message}')
 
 def write_to_csv(data):
-    with open('./db/database.csv', newline='', mode='a') as database2:
+    with open(my_cvs_dbfile, newline='', mode='a') as database2:
         email = data["email"]
         subject = data["subject"]
         message = data["message"]
